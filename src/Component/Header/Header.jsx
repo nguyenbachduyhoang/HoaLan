@@ -14,7 +14,7 @@ const Header = () => {
       <nav className="main-nav">
         <ul>
           <li><Link to="/">TRANG CHỦ</Link></li>
-          <li><Link to="/tintuc">TIN TỨC</Link></li>
+          <li><Link to="/dashboard">DASHBOARD</Link></li>
           <li><Link to="/products">SẢN PHẨM</Link></li>
           <li><Link to="/special-products">SẢN PHẨM ĐẶC BIỆT</Link></li>
           <li><Link to="/about">ABOUT US</Link></li>

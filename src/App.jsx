@@ -1,5 +1,5 @@
 
-  /* The following line can be included in your src/index.js or App.js file */
+/* The following line can be included in your src/index.js or App.js file */
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
@@ -26,7 +26,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
 
-          <Route path="/tintuc" element={<DashBoard />} /> {/*  */}
+          <Route path="/dashboard" element={<DashBoard />} /> {/*  */}
           <Route path="/products" element={<Product />} />
           <Route path="/special-products" element={<Special />} />
           <Route path="/detail/:id" element={<Detail />} />
