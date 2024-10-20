@@ -1,0 +1,98 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Lora:wght@400;700&display=swap');
+
+.detail-container {
+  display: flex;
+  padding: 20px;
+  max-width: 1200px; /* Increased max width for wider layout */
+  margin: 40px auto; /* Increased margin */
+  background-color: #f9f9f9; /* Light background for the container */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+}
+
+.detail-image {
+  flex: 1;
+  padding-right: 20px;
+}
+
+.detail-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px; /* Rounded image corners */
+  transition: transform 0.3s; /* Zoom effect on hover */
+}
+
+.detail-image img:hover {
+  transform: scale(1.05); /* Zoom image on hover */
+}
+
+.detail-info {
+  flex: 1;
+  padding-left: 20px; /* Add left padding */
+}
+
+.detail-info h2 {
+  font-size: 2em; /* Increased heading font size */
+  margin: 0 0 10px; /* Remove top margin */
+  color: #333; /* Title color */
+  font-family: 'Lora', serif; /* Serif font for headings */
+}
+
+.special-tag {
+  background-color: #ff4500; /* Background color for special tag */
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px; /* More rounded tag */
+  font-size: 0.9em;
+  font-weight: bold; /* Bold text */
+  font-family: 'Roboto', sans-serif; /* Sans-serif font for tags */
+}
+
+.color-dot {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+.rating {
+  margin: 10px 0;
+}
+
+.star {
+  color: #ddd;
+  font-size: 1.5em; /* Increased star size */
+}
+
+.star.filled {
+  color: #ffd700; /* Yellow for filled stars */
+}
+
+.detail-info p {
+  font-size: 1.1em; /* Increased font size for information */
+  color: #555; /* Information text color */
+  line-height: 1.5; /* Line height */
+  font-family: 'Roboto', sans-serif; /* Sans-serif font for text */
+}
+
+.detail-info iframe {
+  margin-top: 20px; /* Top margin for video */
+  border-radius: 10px; /* Rounded video corners */
+  width: 100%; /* Ensure video takes full width */
+  max-width: 560px; /* Max width limit */
+  height: 315px; /* Fixed height */
+}
+
+@media (max-width: 768px) {
+  .detail-container {
+    flex-direction: column; /* Vertical layout for small screens */
+  }
+  
+  .detail-image {
+    padding-right: 0; /* Remove right padding on small screens */
+    padding-bottom: 20px; /* Add bottom margin for images */
+  }
+}

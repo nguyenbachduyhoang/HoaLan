@@ -1,0 +1,99 @@
+.contact-section {
+  padding: 80px 20px;
+  background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-container {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  padding: 40px;
+  text-align: center;
+  transition: transform 0.3s ease; /* Thêm hiệu ứng khi hover */
+}
+
+.contact-container:hover {
+  transform: translateY(-5px); /* Hiệu ứng di chuyển hộp khi hover */
+}
+
+.contact-title {
+  font-size: 2.5rem;
+  color: #ff4081; /* Đổi màu tiêu đề thành hồng nổi bật */
+  margin-bottom: 20px;
+  font-family: 'Montserrat', sans-serif;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho tiêu đề */
+}
+
+.contact-description {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 30px;
+  font-family: 'Open Sans', sans-serif;
+  line-height: 1.6;
+}
+
+.contact-info p {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.8;
+  font-family: 'Open Sans', sans-serif;
+  transition: color 0.3s ease; /* Thêm hiệu ứng chuyển màu */
+}
+
+.contact-info p:hover {
+  color: #007BFF; /* Đổi màu khi hover */
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Open Sans', sans-serif;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Thêm hiệu ứng cho input và textarea */
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #007BFF;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Hiệu ứng đổ bóng khi focus */
+}
+
+.contact-form textarea {
+  resize: none;
+  height: 150px;
+}
+
+.contact-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-button:hover {
+  background-color: #218838;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
+.contact-button:active {
+  background-color: #1e7e34;
+}

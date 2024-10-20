@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Open+Sans:wght@400;700&display=swap'); /* Import font Montserrat và Open Sans */
+
+.about-section {
+  padding: 80px 20px;
+  background-image: url('https://example.com/orchid-background.jpg'); /* Hình nền */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(8px); /* Hiệu ứng mờ cho hình nền */
+}
+
+.about-container {
+  background-color: rgba(255, 255, 255, 0.95); /* Nền mờ hơn để dễ nhìn */
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Đổ bóng mềm hơn */
+  max-width: 900px;
+  padding: 60px 40px;
+  text-align: left; /* Văn bản căn lề trái để dễ đọc hơn */
+  transition: transform 0.3s ease;
+}
+
+.about-container:hover {
+  transform: translateY(-8px); /* Hiệu ứng di chuyển hộp khi hover */
+}
+
+.about-title {
+  font-size: 2.8rem;
+  color: #ff4081; /* Màu hồng nổi bật cho tiêu đề */
+  margin-bottom: 25px;
+  font-family: 'Montserrat', sans-serif; /* Font Montserrat cho tiêu đề */
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng cho tiêu đề */
+}
+
+.about-description {
+  font-size: 1.25rem;
+  color: #505050;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  font-family: 'Open Sans', sans-serif; /* Font Open Sans cho nội dung */
+  background: linear-gradient(90deg, #ff4081, #3f51b5); /* Nền gradient cho mô tả */
+  -webkit-background-clip: text; /* Chỉ áp dụng cho chữ */
+  -webkit-text-fill-color: transparent; /* Làm cho chữ trở nên trong suốt */
+}
+
+.about-highlight {
+  font-size: 1.3rem;
+  color: #2c2c2c;
+  font-weight: 700;
+  margin-top: 40px;
+  font-family: 'Open Sans', sans-serif;
+  position: relative; /* Để hiệu ứng đổ bóng hoạt động */
+}
+
+.about-highlight::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 105, 180, 0.2); /* Màu hồng nhạt */
+  border-radius: 8px;
+  z-index: -1; /* Để đảm bảo chữ nằm trên lớp màu */
+  transition: transform 0.3s ease; /* Hiệu ứng khi hover */
+}
+
+.about-highlight:hover::before {
+  transform: scale(1.05); /* Phóng to khi hover */
+}
+
+.about-map-link {
+  font-size: 1.1rem;
+  color: #ffffff;
+  background-color: #007BFF; /* Chuyển nút sang màu xanh dương để hợp với giao diện */
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 30px;
+  padding: 12px 25px;
+  border-radius: 8px;
+  border: none;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3); /* Đổ bóng mềm cho nút */
+}
+
+.about-map-link:hover {
+  background-color: #0056b3;
+  box-shadow: 0 4px 16px rgba(0, 123, 255, 0.5); /* Hiệu ứng đổ bóng mạnh hơn khi hover */
+}
+
+.about-map-link:active {
+  background-color: #004085;
+  box-shadow: none;
+}
