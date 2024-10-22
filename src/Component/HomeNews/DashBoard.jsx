@@ -23,6 +23,9 @@ import {
     createTheme,
     ThemeProvider
 } from '@mui/material';
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import { Checkbox, FormControlLabel } from '@mui/material';
 
 import { Edit, Delete, Add, Sort } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
@@ -63,11 +66,12 @@ export default function DashBoard() {
     const [editMode, setEditMode] = useState(false);
     const [currentProduct, setCurrentProduct] = useState({ name: '', rating: '', color: '', category: '', price: '', image: '' });
     const url = "https://670a18feaf1a3998baa30962.mockapi.io/HoaLan";
+    const [isChecked, setIsChecked] = useState(false);
 
     useEffect(() => {
         axios.get(url)
             .then(res => setData(res.data));
-    }, []);
+    }, [data]);
 
     const handleSortByRating = () => {
         const sortedData = [...data].sort((a, b) => sortAsc ? a.rating - b.rating : b.rating - a.rating);
@@ -75,21 +79,26 @@ export default function DashBoard() {
         setSortAsc(!sortAsc);
     };
 
+
     const handleOpen = () => {
-        setCurrentProduct({ name: '', rating: '', color: '', category: '', price: '', image: '' });
+        setCurrentProduct(formik.values);
         setEditMode(false);
         setOpen(true);
     };
 
     const handleEdit = (id) => {
+
         const productToEdit = data.find(item => item.id === id);
-        setCurrentProduct(productToEdit);
+        formik.values = productToEdit;
+        formik.setValues(productToEdit);
+        setCurrentProduct({ ...formik.values, id: id }); console.log(currentProduct)
         setEditMode(true);
         setOpen(true);
     };
 
     const handleClose = () => {
         setOpen(false);
+        formik.resetForm();
     };
 
     const generateNewId = () => {
@@ -99,14 +108,15 @@ export default function DashBoard() {
 
     const handleSave = () => {
         if (editMode) {
-            axios.put(`${url}/${currentProduct.id}`, currentProduct)
+            console.log(formik.values)
+            axios.put(`${url}/${currentProduct.id}`, formik.values)
                 .then(() => {
                     setData(data.map(item => (item.id === currentProduct.id ? currentProduct : item)));
                     handleClose();
                     alert("Product updated successfully!");
-                });
+                }).catch(errors => console.log(errors));
         } else {
-            const newProduct = { ...currentProduct, id: generateNewId() };
+            const newProduct = { ...formik.values, id: generateNewId() };
             axios.post(url, newProduct)
                 .then(res => {
                     setData([...data, newProduct]);
@@ -114,6 +124,7 @@ export default function DashBoard() {
                     alert("Product added successfully!");
                 });
         }
+        formik.resetForm();
     };
 
     const handleDelete = (id) => {
@@ -130,6 +141,52 @@ export default function DashBoard() {
         }
     };
 
+
+    const formik = useFormik({
+        validateOnChange: false, //được kích hoạt khi giá trị input thay đổi
+        validateOnBlur: false, //kích hoạt khi thoát khỏi input
+        initialValues: {
+
+            name: '',
+            rating: 0,
+            isSpecial: false,
+            image: '',
+            color: '',
+            origin: '',
+            category: '',
+            description: '',
+            price: 0,
+            videoUrl: '',
+
+        },
+        onSubmit: handleSave,
+
+        validationSchema: Yup.object({
+            name: Yup.string()
+                .required("Required.")
+                .min(2, "Must be 2 characters or more"),
+            rating: Yup.number()
+                .required("Required.")
+                .min(1, "Rating phải lớn hơn 1.")
+                .max(5, "Phải nhỏ hơn hoặc bằng 5."),
+            image: Yup.string()
+                .required("Required."),
+            color: Yup.string()
+                .required("Required."),
+            origin: Yup.string()
+                .required("Required."),
+            category: Yup.string()
+                .required("Required."),
+            description: Yup.string()
+                .required("Required."),
+            price: Yup.number()
+                .required("Required.")
+                .min(0, "Price must be greater than or equal to 0."),
+            videoUrl: Yup.string()
+                .url("Must be a valid URL.")
+                .required("Required."),
+        }),
+    })
     return (
         <ThemeProvider theme={theme}>
             <Container maxWidth="lg">
@@ -229,68 +286,136 @@ export default function DashBoard() {
                     <DialogTitle sx={{ color: '#FF69B4' }}>
                         {editMode ? 'Edit Product' : 'Add Product'}
                     </DialogTitle>
-                    <DialogContent>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            label="Name"
-                            type="text"
-                            fullWidth
-                            variant="outlined"
-                            value={currentProduct.name}
-                            onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })}
-                        />
-                        <TextField
-                            margin="dense"
-                            label="Rating"
-                            type="number"
-                            fullWidth
-                            variant="outlined"
-                            value={currentProduct.rating}
-                            onChange={(e) => setCurrentProduct({ ...currentProduct, rating: e.target.value })}
-                        />
-                        <TextField
-                            margin="dense"
-                            label="Color"
-                            type="text"
-                            fullWidth
-                            variant="outlined"
-                            value={currentProduct.color}
-                            onChange={(e) => setCurrentProduct({ ...currentProduct, color: e.target.value })}
-                        />
-                        <TextField
-                            margin="dense"
-                            label="Category"
-                            type="text"
-                            fullWidth
-                            variant="outlined"
-                            value={currentProduct.category}
-                            onChange={(e) => setCurrentProduct({ ...currentProduct, category: e.target.value })}
-                        />
-                        <TextField
-                            margin="dense"
-                            label="Price"
-                            type="number"
-                            fullWidth
-                            variant="outlined"
-                            value={currentProduct.price}
-                            onChange={(e) => setCurrentProduct({ ...currentProduct, price: e.target.value })}
-                        />
-                        <TextField
-                            margin="dense"
-                            label="Image URL"
-                            type="text"
-                            fullWidth
-                            variant="outlined"
-                            value={currentProduct.image}
-                            onChange={(e) => setCurrentProduct({ ...currentProduct, image: e.target.value })}
-                        />
-                    </DialogContent>
+                    <form onSubmit={formik.handleSubmit}>
+                        <DialogContent>
+                            <TextField
+                                name='name'
+                                autoFocus
+                                margin="dense"
+                                label="Name"
+                                type="text"
+                                fullWidth
+                                variant="outlined"
+                                value={formik.values.name}
+                                onChange={formik.handleChange}
+                            />
+                            {formik.errors.name && (<Typography variant="error" component="h4"> {formik.errors.name}   </Typography>
+                            )}
+                            <TextField
+                                name='rating'
+                                margin="dense"
+                                label="Rating"
+                                type="number"
+                                fullWidth
+                                variant="outlined"
+                                value={formik.values.rating}
+                                onChange={formik.handleChange}
+                            />
+                            {formik.errors.rating && (<Typography variant="error" component="h4"> {formik.errors.rating}   </Typography>
+                            )}
+                            <TextField
+                                name='image'
+                                margin="dense"
+                                label="Image URL"
+                                type="text"
+                                fullWidth
+                                variant="outlined"
+                                value={formik.values.image}
+                                onChange={formik.handleChange}
+                            />
+                            {formik.errors.image && (<Typography variant="error" component="h4"> {formik.errors.image}   </Typography>
+                            )}
+                            <TextField
+                                name='color'
+                                margin="dense"
+                                label="Color"
+                                type="text"
+                                fullWidth
+                                variant="outlined"
+                                value={formik.values.color}
+                                onChange={formik.handleChange}
+                            />
+                            {formik.errors.color && (<Typography variant="error" component="h4"> {formik.errors.color}   </Typography>
+                            )}
+                            <TextField
+                                name='origin'
+                                margin="dense"
+                                label="Origin"
+                                type="text"
+                                fullWidth
+                                variant="outlined"
+                                value={formik.values.origin}
+                                onChange={formik.handleChange}
+                            />
+                            {formik.errors.origin && (<Typography variant="error" component="h4"> {formik.errors.origin}   </Typography>
+                            )}
+                            <TextField
+                                name='category'
+                                margin="dense"
+                                label="Category"
+                                type="text"
+                                fullWidth
+                                variant="outlined"
+                                value={formik.values.category}
+                                onChange={formik.handleChange}
+                            />
+                            {formik.errors.category && (<Typography variant="error" component="h4"> {formik.errors.category}   </Typography>
+                            )}
+                            <TextField
+                                name='description'
+                                margin="dense"
+                                label="Description"
+                                type="text"
+                                fullWidth
+                                variant="outlined"
+                                value={formik.values.description}
+                                onChange={formik.handleChange}
+                            />
+                            {formik.errors.description && (<Typography variant="error" component="h4"> {formik.errors.description}   </Typography>
+                            )}
+                            <TextField
+                                name='price'
+                                margin="dense"
+                                label="Price"
+                                type="number"
+                                fullWidth
+                                variant="outlined"
+                                value={formik.values.price}
+                                onChange={formik.handleChange}
+                            />
+                            {formik.errors.price && (<Typography variant="error" component="h4"> {formik.errors.price}   </Typography>
+                            )}
+                            <TextField
+                                name='videoUrl'
+                                margin="dense"
+                                label="Video URL"
+                                type="text"
+                                fullWidth
+                                variant="outlined"
+                                value={formik.values.videoUrl}
+                                onChange={formik.handleChange}
+                            />
+                            {formik.errors.videoUrl && (<Typography variant="error" component="h4"> {formik.errors.videoUrl}   </Typography>
+                            )}
+
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        name="isSpecial"
+                                        checked={formik.values.isSpecial}
+                                        onChange={formik.handleChange}
+                                    />
+                                }
+                                label="Special"
+                            />
+                        </DialogContent>
+                    </form>
                     <DialogActions>
+
                         <Button onClick={handleClose} sx={{ color: '#FF69B4' }}>
                             Cancel
                         </Button>
-                        <Button onClick={handleSave} variant="contained" color="primary">
+                        <Button onClick={formik.handleSubmit} variant="contained" color="primary">
                             {editMode ? 'Update' : 'Add'}
                         </Button>
                     </DialogActions>

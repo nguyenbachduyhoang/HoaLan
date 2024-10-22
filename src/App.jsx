@@ -8,7 +8,6 @@ import Special from './Component/Special/Special';
 import Detail from './Component/Detail/Detail';
 import About from './Component/About/About';
 import Contact from './Component/Contact/Contact';
-import Contact1 from './Component/Contact1/Contact1';
 import DashBoard from './Component/HomeNews/DashBoard';
 import Login from './Component/Login/Login';
 
@@ -42,7 +41,6 @@ function App() {
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/contact1" element={<Contact1 />} />
           <Route path="/login" element={<Login onLogin={handleLogin} onLogout={handleLogout} />} />
         </Routes>
         <Footer />

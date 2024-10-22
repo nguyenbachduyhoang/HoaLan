@@ -20,8 +20,7 @@ const Header = ({ isLoggedIn }) => {
           <li><Link to="/products">SẢN PHẨM</Link></li>
           <li><Link to="/special-products">SẢN PHẨM ĐẶC BIỆT</Link></li>
           <li><Link to="/about">ABOUT US</Link></li>
-          <li><Link to="/contact">CONTACT</Link></li>
-          <li><Link to="/contact1">CONTACT1</Link></li>
+          <li><Link to="/contact">LIÊN HỆ</Link></li>
           <li><Link to="/login">TÀI KHOẢN</Link></li>
         </ul>
       </nav>
