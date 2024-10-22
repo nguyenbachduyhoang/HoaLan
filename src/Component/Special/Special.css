@@ -18,6 +18,7 @@
   display: flex;
   justify-content: center; /* Căn giữa thanh tìm kiếm */
   margin-bottom: 20px; /* Khoảng cách dưới */
+  justify-content: center; /* Căn giữa thanh tìm kiếm */
 }
 
 .search-bar input {

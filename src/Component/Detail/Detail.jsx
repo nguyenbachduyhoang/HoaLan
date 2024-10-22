@@ -40,17 +40,15 @@ const Detail = () => {
       </div>
       <div className="detail-info">
         <h2>{flower.name}</h2>
-        {flower.isSpecial && <span className="special-tag">SPECIAL</span>}
         <p><strong>Chủng loại:</strong> {flower.category}</p>
         <p><strong>Xuất xứ:</strong> {flower.origin}</p>
         <p><strong>Màu sắc:</strong> <span className="color-dot" style={{ backgroundColor: flower.color }}></span></p>
         <p><strong>Giá:</strong> {flower.price} VNĐ</p>
-        <div className="rating">
-          <strong>Đánh giá:</strong>
-          {[...Array(5)].map((_, index) => (
-            <span key={index} className={index < flower.rating ? "star filled" : "star"}>★</span>
-          ))}
-        </div>
+        <p> <strong>Đánh giá:</strong>
+          {'⭐'.repeat(flower.rating)}
+        </p>
+
+
         <p><strong>Mô tả:</strong> {flower.description}</p>
       </div>
       <iframe width="560" height="315" src="https://www.youtube.com/embed/VVQ0p-9PdWM?si=D4yL24H46MHRTA96" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>

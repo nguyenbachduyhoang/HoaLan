@@ -17,38 +17,43 @@ import {
     Typography,
     Box,
     Container,
-    Grid,
-    Card,
-    CardContent,
-    CardMedia,
     IconButton,
     Tooltip,
-    Chip
+    Chip,
+    createTheme,
+    ThemeProvider
 } from '@mui/material';
+
 import { Edit, Delete, Add, Sort } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 
+// Tạo theme với màu hồng chủ đạo
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#FF69B4',
+            light: '#FFB6C1',
+            dark: '#FF1493',
+        },
+        secondary: {
+            main: '#FF69B4',
+        },
+    },
+});
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     fontWeight: 'bold',
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: '#FF69B4',
     color: theme.palette.common.white,
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover,
+        backgroundColor: '#FFF0F5',  // Màu hồng nhạt cho hàng lẻ
     },
     '&:hover': {
-        backgroundColor: theme.palette.action.selected,
+        backgroundColor: '#FFB6C1',  // Màu hồng nhạt khi hover
     },
-}));
-
-const ProductCard = styled(Card)(({ theme }) => ({
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    transition: 'transform 0.15s ease-in-out',
-    '&:hover': { transform: 'scale3d(1.05, 1.05, 1)' },
 }));
 
 export default function DashBoard() {
@@ -57,7 +62,6 @@ export default function DashBoard() {
     const [open, setOpen] = useState(false);
     const [editMode, setEditMode] = useState(false);
     const [currentProduct, setCurrentProduct] = useState({ name: '', rating: '', color: '', category: '', price: '', image: '' });
-    const [viewMode, setViewMode] = useState('table'); // 'table' or 'grid'
     const url = "https://670a18feaf1a3998baa30962.mockapi.io/HoaLan";
 
     useEffect(() => {
@@ -127,38 +131,28 @@ export default function DashBoard() {
     };
 
     return (
-        <Container maxWidth="lg">
-            <Box sx={{ my: 4 }}>
-                <Typography variant="h4" component="h1" gutterBottom>
-                    Product Dashboard
-                </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        startIcon={<Add />}
-                        onClick={handleOpen}
+        <ThemeProvider theme={theme}>
+            <Container maxWidth="lg">
+                <Box sx={{ my: 4 }}>
+                    <Typography
+                        variant="h4"
+                        component="h1"
+                        gutterBottom
+                        sx={{ color: '#FF69B4' }}
                     >
-                        Add Product
-                    </Button>
-                    <Box>
+                        Product Dashboard
+                    </Typography>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
                         <Button
-                            variant={viewMode === 'table' ? 'contained' : 'outlined'}
-                            onClick={() => setViewMode('table')}
-                            sx={{ mr: 1 }}
+                            variant="contained"
+                            color="primary"
+                            startIcon={<Add />}
+                            onClick={handleOpen}
                         >
-                            Table View
-                        </Button>
-                        <Button
-                            variant={viewMode === 'grid' ? 'contained' : 'outlined'}
-                            onClick={() => setViewMode('grid')}
-                        >
-                            Grid View
+                            Add Product
                         </Button>
                     </Box>
-                </Box>
 
-                {viewMode === 'table' ? (
                     <TableContainer component={Paper} elevation={3}>
                         <Table>
                             <TableHead>
@@ -170,7 +164,7 @@ export default function DashBoard() {
                                             Rating
                                             <Tooltip title="Sort by Rating">
                                                 <IconButton size="small" onClick={handleSortByRating}>
-                                                    <Sort />
+                                                    <Sort sx={{ color: 'white' }} />
                                                 </IconButton>
                                             </Tooltip>
                                         </Box>
@@ -193,19 +187,33 @@ export default function DashBoard() {
                                         </TableCell>
                                         <TableCell align="center"><strong>{hoalan.name}</strong></TableCell>
                                         <TableCell align="center">
-                                            <Chip label={hoalan.rating} color="primary" />
+                                            <Chip
+                                                label={hoalan.rating}
+                                                color="primary"
+                                                sx={{
+                                                    '& .MuiChip-label': {
+                                                        color: 'white'
+                                                    }
+                                                }}
+                                            />
                                         </TableCell>
                                         <TableCell align="center">{hoalan.color}</TableCell>
                                         <TableCell align="center">{hoalan.category}</TableCell>
-                                        <TableCell align="center">${hoalan.price}</TableCell>
+                                        <TableCell align="center">{hoalan.price} VNĐ</TableCell>
                                         <TableCell align="center">
                                             <Tooltip title="Edit">
-                                                <IconButton color="primary" onClick={() => handleEdit(hoalan.id)}>
+                                                <IconButton
+                                                    onClick={() => handleEdit(hoalan.id)}
+                                                    sx={{ color: '#FF69B4' }}
+                                                >
                                                     <Edit />
                                                 </IconButton>
                                             </Tooltip>
                                             <Tooltip title="Delete">
-                                                <IconButton color="secondary" onClick={() => handleDelete(hoalan.id)}>
+                                                <IconButton
+                                                    onClick={() => handleDelete(hoalan.id)}
+                                                    sx={{ color: '#FF1493' }}
+                                                >
                                                     <Delete />
                                                 </IconButton>
                                             </Tooltip>
@@ -215,117 +223,79 @@ export default function DashBoard() {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                ) : (
-                    <Grid container spacing={3}>
-                        {data.map((hoalan) => (
-                            <Grid item xs={12} sm={6} md={4} key={hoalan.id}>
-                                <ProductCard>
-                                    <CardMedia
-                                        component="img"
-                                        height="140"
-                                        image={hoalan.image}
-                                        alt={hoalan.name}
-                                    />
-                                    <CardContent>
-                                        <Typography gutterBottom variant="h6" component="div">
-                                            {hoalan.name}
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Category: {hoalan.category}
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Color: {hoalan.color}
-                                        </Typography>
-                                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-                                            <Chip label={`Rating: ${hoalan.rating}`} color="primary" />
-                                            <Typography variant="h6" color="text.primary">
-                                                ${hoalan.price}
-                                            </Typography>
-                                        </Box>
-                                    </CardContent>
-                                    <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between' }}>
-                                        <Button size="small" color="primary" startIcon={<Edit />} onClick={() => handleEdit(hoalan.id)}>
-                                            Edit
-                                        </Button>
-                                        <Button size="small" color="secondary" startIcon={<Delete />} onClick={() => handleDelete(hoalan.id)}>
-                                            Delete
-                                        </Button>
-                                    </Box>
-                                </ProductCard>
-                            </Grid>
-                        ))}
-                    </Grid>
-                )}
-            </Box>
+                </Box>
 
-            <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>{editMode ? 'Edit Product' : 'Add Product'}</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        label="Name"
-                        type="text"
-                        fullWidth
-                        variant="outlined"
-                        value={currentProduct.name}
-                        onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })}
-                    />
-                    <TextField
-                        margin="dense"
-                        label="Rating"
-                        type="number"
-                        fullWidth
-                        variant="outlined"
-                        value={currentProduct.rating}
-                        onChange={(e) => setCurrentProduct({ ...currentProduct, rating: e.target.value })}
-                    />
-                    <TextField
-                        margin="dense"
-                        label="Color"
-                        type="text"
-                        fullWidth
-                        variant="outlined"
-                        value={currentProduct.color}
-                        onChange={(e) => setCurrentProduct({ ...currentProduct, color: e.target.value })}
-                    />
-                    <TextField
-                        margin="dense"
-                        label="Category"
-                        type="text"
-                        fullWidth
-                        variant="outlined"
-                        value={currentProduct.category}
-                        onChange={(e) => setCurrentProduct({ ...currentProduct, category: e.target.value })}
-                    />
-                    <TextField
-                        margin="dense"
-                        label="Price"
-                        type="number"
-                        fullWidth
-                        variant="outlined"
-                        value={currentProduct.price}
-                        onChange={(e) => setCurrentProduct({ ...currentProduct, price: e.target.value })}
-                    />
-                    <TextField
-                        margin="dense"
-                        label="Image URL"
-                        type="text"
-                        fullWidth
-                        variant="outlined"
-                        value={currentProduct.image}
-                        onChange={(e) => setCurrentProduct({ ...currentProduct, image: e.target.value })}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleSave} color="primary" variant="contained">
-                        {editMode ? 'Update' : 'Add'}
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </Container>
+                <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle sx={{ color: '#FF69B4' }}>
+                        {editMode ? 'Edit Product' : 'Add Product'}
+                    </DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            label="Name"
+                            type="text"
+                            fullWidth
+                            variant="outlined"
+                            value={currentProduct.name}
+                            onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })}
+                        />
+                        <TextField
+                            margin="dense"
+                            label="Rating"
+                            type="number"
+                            fullWidth
+                            variant="outlined"
+                            value={currentProduct.rating}
+                            onChange={(e) => setCurrentProduct({ ...currentProduct, rating: e.target.value })}
+                        />
+                        <TextField
+                            margin="dense"
+                            label="Color"
+                            type="text"
+                            fullWidth
+                            variant="outlined"
+                            value={currentProduct.color}
+                            onChange={(e) => setCurrentProduct({ ...currentProduct, color: e.target.value })}
+                        />
+                        <TextField
+                            margin="dense"
+                            label="Category"
+                            type="text"
+                            fullWidth
+                            variant="outlined"
+                            value={currentProduct.category}
+                            onChange={(e) => setCurrentProduct({ ...currentProduct, category: e.target.value })}
+                        />
+                        <TextField
+                            margin="dense"
+                            label="Price"
+                            type="number"
+                            fullWidth
+                            variant="outlined"
+                            value={currentProduct.price}
+                            onChange={(e) => setCurrentProduct({ ...currentProduct, price: e.target.value })}
+                        />
+                        <TextField
+                            margin="dense"
+                            label="Image URL"
+                            type="text"
+                            fullWidth
+                            variant="outlined"
+                            value={currentProduct.image}
+                            onChange={(e) => setCurrentProduct({ ...currentProduct, image: e.target.value })}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose} sx={{ color: '#FF69B4' }}>
+                            Cancel
+                        </Button>
+                        <Button onClick={handleSave} variant="contained" color="primary">
+                            {editMode ? 'Update' : 'Add'}
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            </Container>
+        </ThemeProvider>
     );
 }

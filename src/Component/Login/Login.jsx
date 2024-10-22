@@ -1,26 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import { GoogleLogin, googleLogout } from '@react-oauth/google'; //lấy api đăng nhập từ google
+import React, { useState, useEffect } from 'react';
+import { GoogleLogin, googleLogout } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
 
-function Login() {
-    const [profile, setProfile] = useState(); // Thêm state để lưu trữ thông tin người dùng
-    const handleLoginSuccess = async response => {
-        console.log('Login success:', response);
-        var decodedCredentials = jwtDecode(response.credential)
-        console.log(decodedCredentials)
-        setProfile(decodedCredentials)
-        // Lấy thông tin người dùng từ Google
+function Login({ onLogin, onLogout }) {
+    const [profile, setProfile] = useState(null);
 
+    useEffect(() => {
+        const storedProfile = localStorage.getItem('profile');
+        if (storedProfile) {
+            setProfile(JSON.parse(storedProfile));
+        }
+    }, []);
+
+    const handleLoginSuccess = (response) => {
+        const decodedCredentials = jwtDecode(response.credential);
+        setProfile(decodedCredentials);
+        localStorage.setItem('profile', JSON.stringify(decodedCredentials));
+        onLogin(); // Gọi hàm onLogin từ App
     };
-
 
     const handleLoginFailure = (error) => {
         console.log('Login failed:', error);
     };
 
     const logOut = () => {
-        googleLogout(); // Đăng xuất người dùng
-        setProfile(null); // Đặt lại state profile
+        googleLogout();
+        setProfile(null);
+        localStorage.removeItem('profile');
+        onLogout(); // Gọi hàm onLogout từ App
     };
 
     return (

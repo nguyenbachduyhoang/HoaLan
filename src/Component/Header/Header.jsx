@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
 
-const Header = () => {
+const Header = ({ isLoggedIn }) => {
   return (
     <header className="header">
       <div className="logo-container">
@@ -14,13 +14,15 @@ const Header = () => {
       <nav className="main-nav">
         <ul>
           <li><Link to="/">TRANG CHỦ</Link></li>
-          <li><Link to="/dashboard">DASHBOARD</Link></li>
+          {isLoggedIn && (
+            <li><Link to="/dashboard">DASHBOARD</Link></li>
+          )}
           <li><Link to="/products">SẢN PHẨM</Link></li>
           <li><Link to="/special-products">SẢN PHẨM ĐẶC BIỆT</Link></li>
           <li><Link to="/about">ABOUT US</Link></li>
           <li><Link to="/contact">CONTACT</Link></li>
           <li><Link to="/contact1">CONTACT1</Link></li>
-          <li><Link to="/login">LOGIN</Link></li>
+          <li><Link to="/login">TÀI KHOẢN</Link></li>
         </ul>
       </nav>
     </header>
