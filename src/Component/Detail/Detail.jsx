@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import './Detail.css';
+import Comment from '../Comment/Comment';
 
 const Detail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [flower, setFlower] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,6 +30,38 @@ const Detail = () => {
     fetchFlower();
   }, [id]);
 
+  const handleAddToCart = () => {
+    const isLoggedIn = sessionStorage.getItem('user');
+    
+    if (!isLoggedIn) {
+      localStorage.setItem('redirectAfterLogin', window.location.pathname);
+      navigate('/login');
+      return;
+    }
+
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existingItem = cart.find(item => item.id === flower.id);
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cart.push({
+        ...flower,
+        quantity: 1
+      });
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    toast.success(`Đã thêm "${flower.name}" vào giỏ hàng!`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  };
+
   if (loading) return <div>Đang tải dữ liệu...</div>;
   if (error) return <div>Có lỗi xảy ra: {error}</div>;
   if (!flower) return <div>Không tìm thấy sản phẩm</div>;
@@ -35,23 +70,47 @@ const Detail = () => {
 
   return (
     <div className="detail-container">
-      <div className="detail-image">
-        <img src={imgURL} alt={flower.name} className="product-image" />
+      {/* Product Section */}
+      <div className="product-section">
+        <div className="detail-image">
+          <img src={imgURL} alt={flower.name} className="product-image" />
+        </div>
+        <div className="detail-info">
+          <h2>{flower.name}</h2>
+          <p><strong>Chủng loại:</strong> {flower.category}</p>
+          <p><strong>Xuất xứ:</strong> {flower.origin}</p>
+          <p><strong>Màu sắc:</strong> <span className="color-dot" style={{ backgroundColor: flower.color }}></span></p>
+          <p><strong>Giá:</strong> {flower.price} VNĐ</p>
+          <p><strong>Đánh giá:</strong> {'⭐'.repeat(flower.rating)}</p>
+          <p><strong>Mô tả:</strong> {flower.description}</p>
+          
+          {/* Thêm nút Thêm vào giỏ hàng */}
+          <button 
+            className="add-to-cart-button"
+            onClick={handleAddToCart}
+          >
+            Thêm vào giỏ hàng
+          </button>
+        </div>
       </div>
-      <div className="detail-info">
-        <h2>{flower.name}</h2>
-        <p><strong>Chủng loại:</strong> {flower.category}</p>
-        <p><strong>Xuất xứ:</strong> {flower.origin}</p>
-        <p><strong>Màu sắc:</strong> <span className="color-dot" style={{ backgroundColor: flower.color }}></span></p>
-        <p><strong>Giá:</strong> {flower.price} VNĐ</p>
-        <p> <strong>Đánh giá:</strong>
-          {'⭐'.repeat(flower.rating)}
-        </p>
 
-
-        <p><strong>Mô tả:</strong> {flower.description}</p>
+      {/* Video Section */}
+      <div className="video-section">
+        <iframe 
+          width="560" 
+          height="315" 
+          src="https://www.youtube.com/embed/VVQ0p-9PdWM?si=D4yL24H46MHRTA96" 
+          title="YouTube video player" 
+          frameBorder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          allowFullScreen
+        ></iframe>
       </div>
-      <iframe width="560" height="315" src="https://www.youtube.com/embed/VVQ0p-9PdWM?si=D4yL24H46MHRTA96" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+      {/* Comment Section */}
+      <div className="comment-section">
+        <Comment />
+      </div>
     </div>
   );
 };

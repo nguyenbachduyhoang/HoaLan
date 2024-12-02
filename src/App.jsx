@@ -10,23 +10,31 @@ import About from './Component/About/About';
 import Contact from './Component/Contact/Contact';
 import DashBoard from './Component/HomeNews/DashBoard';
 import Login from './Component/Login/Login';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Cart from './Component/Cart/Cart';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState(null);
 
   useEffect(() => {
-    const storedProfile = localStorage.getItem('profile');
-    if (storedProfile) {
-      setIsLoggedIn(true); // Người dùng đã đăng nhập trước đó
+    const user = JSON.parse(sessionStorage.getItem('user'));
+    if (user) {
+      setIsLoggedIn(true);
+      setUserRole(user.role);
     }
   }, []);
 
-  const handleLogin = () => {
-    setIsLoggedIn(true); // Cập nhật trạng thái đăng nhập
+  const handleLogin = (role) => {
+    setIsLoggedIn(true);
+    setUserRole(role);
   };
 
   const handleLogout = () => {
-    setIsLoggedIn(false); // Cập nhật trạng thái đăng xuất
+    setIsLoggedIn(false);
+    setUserRole(null);
+    sessionStorage.removeItem('user');
   };
 
   return (
@@ -35,15 +43,19 @@ function App() {
         <Header isLoggedIn={isLoggedIn} />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/dashboard" element={<DashBoard />} />
+          <Route path="/login" element={<Login onLogin={handleLogin} onLogout={handleLogout} />} />
+          {userRole === 'admin' && (
+            <Route path="/dashboard" element={<DashBoard />} />
+          )}
           <Route path="/products" element={<Product />} />
           <Route path="/special-products" element={<Special />} />
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/login" element={<Login onLogin={handleLogin} onLogout={handleLogout} />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
         <Footer />
+        <ToastContainer />
       </div>
     </Router>
   );

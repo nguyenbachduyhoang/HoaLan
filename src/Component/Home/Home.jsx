@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Home.css';
-import dataFlower from '../../data/DataFlower';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
-  // Lọc ra 3 sản phẩm đặc biệt
-  const specialProducts = dataFlower.filter(flower => flower.isSpecial).slice(0, 3);
+  const [specialProducts, setSpecialProducts] = useState([]);
+
+  // Gọi API để lấy danh sách sản phẩm
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('https://670a18feaf1a3998baa30962.mockapi.io/HoaLan');
+        const data = await response.json();
+        // Lọc 3 sản phẩm đặc biệt
+        const special = data.filter((flower) => flower.isSpecial).slice(0, 3);
+        setSpecialProducts(special);
+      } catch (error) {
+        console.error('Lỗi khi gọi API:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <div className="home-container">
@@ -48,7 +63,6 @@ const Home = () => {
         <img src="/orchid-meaning.jpg" alt="Ý nghĩa hoa lan" className="meaning-image" />
       </div>
 
-
       {/* Thêm phần sản phẩm đặc biệt */}
       <div className="special-products-section">
         <h2>Sản phẩm đặc biệt</h2>
@@ -69,7 +83,7 @@ const Home = () => {
               </div>
               <p className="special-product-origin">Xuất xứ: {flower.origin}</p>
               <p className="special-product-price">Giá: {flower.price} VNĐ</p>
-              <Link to="/detail/1" className="detail-link">Chi tiết</Link>
+              <Link to={`/detail/${flower.id}`} className="detail-link">Chi tiết</Link>
             </div>
           ))}
         </div>

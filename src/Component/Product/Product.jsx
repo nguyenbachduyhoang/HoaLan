@@ -4,39 +4,46 @@ import { Link } from 'react-router-dom';
 
 const Product = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(''); // State for selected category
   const [flowers, setFlowers] = useState([]);
-  const [loading, setLoading] = useState(true); // State để kiểm tra trạng thái loading
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch dữ liệu từ MockAPI
     const fetchFlowers = async () => {
       try {
         const response = await fetch('https://670a18feaf1a3998baa30962.mockapi.io/HoaLan');
         const data = await response.json();
-        setFlowers(data); // Cập nhật state với dữ liệu lấy được
-        setLoading(false); // Kết thúc loading
+        setFlowers(data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching flower data:', error);
-        setLoading(false); // Nếu có lỗi, vẫn kết thúc loading
+        setLoading(false);
       }
     };
 
     fetchFlowers();
   }, []);
 
-  // Lọc hoa dựa trên từ khóa tìm kiếm
-  const filteredFlowers = flowers.filter(flower =>
-    flower.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // Nếu đang tải dữ liệu, hiển thị thông báo loading
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+
+  // Filter flowers based on search term and selected category
+  const filteredFlowers = flowers.filter(flower =>
+    flower.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    (selectedCategory === '' || flower.category === selectedCategory)
+  );
+
   if (loading) {
     return <div>Loading...</div>;
   }
+
+  // Extract unique categories for the dropdown
+  const categories = [...new Set(flowers.map(flower => flower.category))];
 
   return (
     <div className="product-page">
@@ -47,17 +54,28 @@ const Product = () => {
           value={searchTerm}
           onChange={handleSearch}
         />
+        <select value={selectedCategory} onChange={handleCategoryChange} className="category-select">
+          <option value="">Tất cả các chủng loại</option>
+          {categories.map(category => (
+            <option key={category} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="product-container">
         {filteredFlowers.map((flower) => (
           <div key={flower.id} className="product-card">
             {flower.isSpecial && <div className="special-tag">SPECIAL</div>}
-            <img
-              src={flower.image}
-              alt={flower.name}
-              className="product-image"
-              aria-label={`Ảnh của hoa ${flower.name}`}
-            />
+            <div className="image-container">
+              <img
+                src={flower.image}
+                alt={flower.name}
+                className="product-image"
+                aria-label={`Ảnh của hoa ${flower.name}`}
+              />
+            </div>
+
             <h3 className="product-name">{flower.name}</h3>
             <p className="product-genus">Chủng loại: {flower.category}</p>
             <div className="product-rating">

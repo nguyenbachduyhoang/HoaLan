@@ -92,11 +92,12 @@
 .special-product-origin {
   font-size: 14px;
   color: #666;
-  text-align: center;
+  text-align: left;
+  margin-bottom: 8px;
 }
 
 .special-product-rating {
-  text-align: center;
+  text-align: left;
   margin-bottom: 10px;
 }
 
@@ -110,9 +111,10 @@
 }
 
 .special-product-color {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 10px;
+  font-size: 14px;
+  color: #666;
+  text-align: left;
+  margin-bottom: 8px;
 }
 
 .color-dot {

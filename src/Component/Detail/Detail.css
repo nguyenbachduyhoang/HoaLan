@@ -3,50 +3,44 @@
 
 .detail-container {
   display: flex;
+  flex-direction: column;
   padding: 20px;
-  max-width: 1200px; /* Increased max width for wider layout */
-  margin: 40px auto; /* Increased margin */
-  background-color: #f9f9f9; /* Light background for the container */
-  border-radius: 10px; /* Rounded corners */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.product-section {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 30px;
 }
 
 .detail-image {
   flex: 1;
-  padding-right: 20px;
+  max-width: 500px;
 }
 
-.detail-image img {
+.product-image {
   width: 100%;
   height: auto;
-  border-radius: 10px; /* Rounded image corners */
-  transition: transform 0.3s; /* Zoom effect on hover */
-}
-
-.detail-image img:hover {
-  transform: scale(1.05); /* Zoom image on hover */
+  border-radius: 8px;
 }
 
 .detail-info {
   flex: 1;
-  padding-left: 20px; /* Add left padding */
+  padding: 20px;
 }
 
-.detail-info h2 {
-  font-size: 2em; /* Increased heading font size */
-  margin: 0 0 10px; /* Remove top margin */
-  color: #333; /* Title color */
-  font-family: 'Lora', serif; /* Serif font for headings */
+.video-section {
+  width: 100%;
+  margin: 30px 0;
+  display: flex;
+  justify-content: center;
 }
 
-.special-tag {
-  background-color: #ff4500; /* Background color for special tag */
-  color: white;
-  padding: 5px 10px;
-  border-radius: 20px; /* More rounded tag */
-  font-size: 0.9em;
-  font-weight: bold; /* Bold text */
-  font-family: 'Roboto', sans-serif; /* Sans-serif font for tags */
+.video-section iframe {
+  max-width: 100%;
+  border-radius: 8px;
 }
 
 .color-dot {
@@ -54,45 +48,42 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  margin-left: 5px;
+  margin-left: 10px;
   vertical-align: middle;
 }
 
-.rating {
-  margin: 10px 0;
+/* Comment section styles */
+.comment-section {
+  width: 100%;
+  margin-top: 30px;
 }
 
-.star {
-  color: #ddd;
-  font-size: 1.5em; /* Increased star size */
+/* Thêm style cho nút thêm vào giỏ hàng */
+.add-to-cart-button {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  margin-top: 20px;
+  background: linear-gradient(45deg, #FF69B4, #FF1493);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
 }
 
-.star.filled {
-  color: #ffd700; /* Yellow for filled stars */
+.add-to-cart-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 105, 180, 0.4);
 }
 
-.detail-info p {
-  font-size: 1.1em; /* Increased font size for information */
-  color: #555; /* Information text color */
-  line-height: 1.5; /* Line height */
-  font-family: 'Roboto', sans-serif; /* Sans-serif font for text */
-}
-
-.detail-info iframe {
-  margin-top: 20px; /* Top margin for video */
-  border-radius: 10px; /* Rounded video corners */
-  width: 100%; /* Ensure video takes full width */
-  max-width: 560px; /* Max width limit */
-  height: 315px; /* Fixed height */
-}
-
+/* Responsive */
 @media (max-width: 768px) {
-  .detail-container {
-    flex-direction: column; /* Vertical layout for small screens */
-  }
-  
-  .detail-image {
-    padding-right: 0; /* Remove right padding on small screens */
-    padding-bottom: 20px; /* Add bottom margin for images */
+  .add-to-cart-button {
+    padding: 12px;
+    font-size: 1rem;
   }
 }

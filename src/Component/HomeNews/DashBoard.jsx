@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import {
     Table,
     TableBody,
@@ -60,6 +61,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function DashBoard() {
+    const navigate = useNavigate();
     const [data, setData] = useState([]);
     const [sortAsc, setSortAsc] = useState(true);
     const [open, setOpen] = useState(false);
@@ -69,9 +71,44 @@ export default function DashBoard() {
     const [isChecked, setIsChecked] = useState(false);
 
     useEffect(() => {
+        const checkAdminAccess = () => {
+            const user = JSON.parse(sessionStorage.getItem('user'));
+            console.log("Current user:", user); // Để debug
+
+            if (!user) {
+                console.log("No user found in session");
+                alert('Vui lòng đăng nhập!');
+                navigate('/login');
+                return false;
+            }
+
+            if (user.role !== 'admin') {
+                console.log("User role:", user.role);
+                alert('Bạn không có quyền truy cập trang này!');
+                navigate('/login');
+                return false;
+            }
+
+            // Nếu email khớp với admin email trong API
+            if (user.email === 'hoanganhdj14@gmail.com') {
+                console.log("Admin access granted");
+                return true;
+            }
+
+            return true;
+        };
+
+        if (!checkAdminAccess()) {
+            return;
+        }
+
+        // Fetch data chỉ khi là admin
         axios.get(url)
-            .then(res => setData(res.data));
-    }, [data]);
+            .then(res => setData(res.data))
+            .catch(error => {
+                console.error("Error fetching data:", error);
+            });
+    }, [navigate]);
 
     const handleSortByRating = () => {
         const sortedData = [...data].sort((a, b) => sortAsc ? a.rating - b.rating : b.rating - a.rating);
